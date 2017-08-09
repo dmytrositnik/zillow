@@ -1,6 +1,5 @@
 import pandas as pd
 import xgboost as xgb
-from sklearn import metrics
 
 
 def modelfit(
@@ -26,15 +25,10 @@ def modelfit(
 
         xgb_regressor.set_params(n_estimators=cvresult.shape[0])
 
+        print(len(cvresult))
+
     # Fit the algorithm on the data
     xgb_regressor.fit(xtrain, ytrain, eval_metric='mae')
-
-    # Predict training set:
-    dtrain_predictions = xgb_regressor.predict(xtrain)
-
-    # Print model report:
-    print "\nModel Report"
-    print "Accuracy : %.4g" % metrics.accuracy_score(ytrain, dtrain_predictions)
 
     fscocre = xgb_regressor.get_booster().get_fscore()
 
