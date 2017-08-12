@@ -1,8 +1,3 @@
-#
-# This script is inspired by this discussion:
-# https://www.kaggle.com/c/zillow-prize-1/discussion/33710
-#
-
 import numpy as np
 import pandas as pd
 import xgboost as xgb
@@ -25,7 +20,6 @@ print('Shape train: {}\nShape test: {}'.format(x_train.shape, x_test.shape))
 
 # drop out ouliers
 train_df = train_df[train_df.logerror > -0.4]
-# train_df=train_df[ train_df.logerror < 0.4 ]
 train_df = train_df[train_df.logerror < 0.46388]
 x_train = train_df.drop(['parcelid', 'logerror', 'transactiondate'], axis=1)
 y_train = train_df["logerror"].values.astype(np.float32)
@@ -61,7 +55,6 @@ cv_result = xgb.cv(xgb_params,
 num_boost_rounds = len(cv_result)
 print(num_boost_rounds)
 # train model
-# model = xgb.train(dict(xgb_params, silent=1), dtrain, num_boost_round=num_boost_rounds)
 model = xgb.train(dict(xgb_params, silent=1), dtrain, num_boost_round=num_boost_rounds)
 pred = model.predict(dtest)
 y_pred = []
