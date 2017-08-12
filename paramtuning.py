@@ -44,89 +44,95 @@ xgb_regressor = XGBRegressor(
     eval_metric='mae',
     base_score=y_mean,
     silent=True)
+
 modelfit(xgb_regressor, x_train, y_train)
 
-param_test1 = {
- 'max_depth':range(3, 10, 2),
- 'min_child_weight':range(1, 6, 2)
-}
-
-gsearch1 = GridSearchCV(
-    xgb_regressor,
-    param_grid=param_test1,
-    n_jobs=8,
-    iid=False,
-    cv=5)
-
-print "start grid search ..."
-gsearch1.fit(x_train, y_train)
-
-print "cv_results_ \n{0}\n\n".format(gsearch1.cv_results_)
-print "best_params_ \n{0}\n\n".format(gsearch1.best_params_)
-print "best_score_ \n{0}\n\n".format(gsearch1.best_score_)
-
-# {'max_depth': 7, 'min_child_weight': 3}
-
-param_test2 = {
- 'max_depth':[6,7,8],
- 'min_child_weight':[2,3,4]
-}
-
-gsearch1 = GridSearchCV(
-    xgb_regressor,
-    param_grid=param_test2,
-    n_jobs=8,
-    iid=False,
-    cv=5)
-
-print "start grid search ..."
-gsearch1.fit(x_train, y_train)
-
-print "cv_results_ \n{0}\n\n".format(gsearch1.cv_results_)
-print "best_params_ \n{0}\n\n".format(gsearch1.best_params_)
-print "best_score_ \n{0}\n\n".format(gsearch1.best_score_)
-
-# {'max_depth': 7, 'min_child_weight': 3}
-
-param_test3 = {
- 'min_child_weight':[3,5,7,9]
-}
-
-xgb_regressor.set_params(max_depth=7)
-
-gsearch1 = GridSearchCV(
-    xgb_regressor,
-    param_grid=param_test3,
-    n_jobs=8,
-    iid=False,
-    cv=5)
-
-print "start grid search ..."
-gsearch1.fit(x_train, y_train)
-
-print "cv_results_ \n{0}\n\n".format(gsearch1.cv_results_)
-print "best_params_ \n{0}\n\n".format(gsearch1.best_params_)
-print "best_score_ \n{0}\n\n".format(gsearch1.best_score_)
-
-# {'min_child_weight': 9}
+# param_test1 = {
+#  'max_depth':range(3, 10, 2),
+#  'min_child_weight':range(1, 6, 2)
+# }
+#
+# gsearch1 = GridSearchCV(
+#     xgb_regressor,
+#     param_grid=param_test1,
+#     n_jobs=8,
+#     iid=False,
+#     cv=5)
+#
+# print "start grid search ..."
+# gsearch1.fit(x_train, y_train)
+#
+# print "cv_results_ \n{0}\n\n".format(gsearch1.cv_results_)
+# print "best_params_ \n{0}\n\n".format(gsearch1.best_params_)
+# print "best_score_ \n{0}\n\n".format(gsearch1.best_score_)
+#
+# # {'max_depth': 7, 'min_child_weight': 3}
+#
+# param_test2 = {
+#  'max_depth':[6,7,8],
+#  'min_child_weight':[2,3,4]
+# }
+#
+# gsearch1 = GridSearchCV(
+#     xgb_regressor,
+#     param_grid=param_test2,
+#     n_jobs=8,
+#     iid=False,
+#     cv=5)
+#
+# print "start grid search ..."
+# gsearch1.fit(x_train, y_train)
+#
+# print "cv_results_ \n{0}\n\n".format(gsearch1.cv_results_)
+# print "best_params_ \n{0}\n\n".format(gsearch1.best_params_)
+# print "best_score_ \n{0}\n\n".format(gsearch1.best_score_)
+#
+# # {'max_depth': 7, 'min_child_weight': 3}
+#
+# param_test3 = {
+#  'min_child_weight':[3,5,7,9]
+# }
+#
+# xgb_regressor.set_params(max_depth=7)
+#
+# gsearch1 = GridSearchCV(
+#     xgb_regressor,
+#     param_grid=param_test3,
+#     n_jobs=8,
+#     iid=False,
+#     cv=5)
+#
+# print "start grid search ..."
+# gsearch1.fit(x_train, y_train)
+#
+# print "cv_results_ \n{0}\n\n".format(gsearch1.cv_results_)
+# print "best_params_ \n{0}\n\n".format(gsearch1.best_params_)
+# print "best_score_ \n{0}\n\n".format(gsearch1.best_score_)
+#
+# # {'min_child_weight': 9}
 
 xgb_regressor_param = xgb_regressor.get_xgb_params()
 
 # cross-validation
-cv_result = xgb.cv(xgb_regressor_param,
-                   dtrain,
-                   nfold=5,
-                   num_boost_round=1000,
-                   early_stopping_rounds=50,
-                   verbose_eval=10,
-                   show_stdv=False
-                   )
-
-num_boost_rounds = len(cv_result)
-print(num_boost_rounds)
+# cv_result = xgb.cv(xgb_regressor_param,
+#                    dtrain,
+#                    nfold=5,
+#                    num_boost_round=1000,
+#                    early_stopping_rounds=50,
+#                    verbose_eval=10,
+#                    show_stdv=False
+#                    )
+#
+# num_boost_rounds = len(cv_result)
+# print(num_boost_rounds)
 # train model
-model = xgb.train(dict(xgb_regressor_param, silent=1), dtrain, num_boost_round=num_boost_rounds)
-pred = model.predict(dtest)
+
+# model = xgb.train(dict(xgb_regressor_param, silent=1), dtrain, num_boost_round=num_boost_rounds)
+# pred = model.predict(dtest)
+
+xgb_regressor.fit(x_train, y_train)
+pred = xgb_regressor.predict(x_test)
+
 y_pred = []
 
 for i, predict in enumerate(pred):

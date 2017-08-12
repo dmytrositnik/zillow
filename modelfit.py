@@ -7,6 +7,7 @@ def modelfit(
         xtrain,
         ytrain,
         use_train_c_v=True,
+        show_feature_importance=False,
         nfold=5,
         num_boost_round=1000,
         early_stopping_rounds=50,
@@ -27,10 +28,11 @@ def modelfit(
 
         print(len(cvresult))
 
-    # Fit the algorithm on the data
-    xgb_regressor.fit(xtrain, ytrain, eval_metric='mae')
+    if show_feature_importance:
+        # Fit the algorithm on the data
+        xgb_regressor.fit(xtrain, ytrain, eval_metric='mae')
 
-    fscocre = xgb_regressor.get_booster().get_fscore()
+        fscocre = xgb_regressor.get_booster().get_fscore()
 
-    feat_imp = pd.Series(fscocre).sort_values(ascending=False)
-    feat_imp.plot(kind='bar', title='Feature Importance')
+        feat_imp = pd.Series(fscocre).sort_values(ascending=False)
+        feat_imp.plot(kind='bar', title='Feature Importance')
