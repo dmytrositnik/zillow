@@ -30,7 +30,7 @@ def modelfit(
 
     if show_feature_importance:
         # Fit the algorithm on the data
-        xgb_regressor.fit(xtrain, ytrain, eval_metric='mae')
+        xgb_regressor.fit(xtrain, ytrain)
 
         fscocre = xgb_regressor.get_booster().get_fscore()
 

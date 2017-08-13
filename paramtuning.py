@@ -7,6 +7,7 @@ from xgboost.sklearn import XGBRegressor
 from sklearn.model_selection import GridSearchCV
 from modelfit import modelfit
 from traintopred import train_to_pred
+from gridsearch import grid_search
 
 properties = pd.read_csv(r"C:\Users\dmysit\OneDrive\zillow\input\properties_2016.csv")
 train = pd.read_csv(r"C:\Users\dmysit\OneDrive\zillow\input\train_2016_v2.csv")
@@ -43,6 +44,7 @@ xgb_regressor = XGBRegressor(
     objective='reg:linear',
     eval_metric='mae',
     base_score=y_mean,
+    gamma=0,
     silent=True)
 
 modelfit(xgb_regressor, x_train, y_train)
@@ -112,6 +114,15 @@ modelfit(xgb_regressor, x_train, y_train)
 # # {'min_child_weight': 9}
 
 # {'min_child_weight': 9}
+
+
+# tune gamma
+
+param_test_gamma = {
+ 'gamma': [i/10.0 for i in range(0, 5)]
+}
+
+grid_search(xgb_regressor, param_test_gamma, x_train, y_train)
 
 xgb_regressor.fit(x_train, y_train)
 pred = xgb_regressor.predict(x_test)
