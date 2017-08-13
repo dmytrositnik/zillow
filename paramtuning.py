@@ -36,10 +36,9 @@ dtest = xgb.DMatrix(x_test)
 
 
 xgb_regressor = XGBRegressor(
-    eta=0.06,
     learning_rate=0.06,
     max_depth=5,
-    subsample=0.77,
+    subsample=0.70,
     objective='reg:linear',
     eval_metric='mae',
     base_score=y_mean,
@@ -111,24 +110,7 @@ modelfit(xgb_regressor, x_train, y_train)
 #
 # # {'min_child_weight': 9}
 
-xgb_regressor_param = xgb_regressor.get_xgb_params()
-
-# cross-validation
-# cv_result = xgb.cv(xgb_regressor_param,
-#                    dtrain,
-#                    nfold=5,
-#                    num_boost_round=1000,
-#                    early_stopping_rounds=50,
-#                    verbose_eval=10,
-#                    show_stdv=False
-#                    )
-#
-# num_boost_rounds = len(cv_result)
-# print(num_boost_rounds)
-# train model
-
-# model = xgb.train(dict(xgb_regressor_param, silent=1), dtrain, num_boost_round=num_boost_rounds)
-# pred = model.predict(dtest)
+# {'min_child_weight': 9}
 
 xgb_regressor.fit(x_train, y_train)
 pred = xgb_regressor.predict(x_test)
