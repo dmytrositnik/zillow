@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
 import xgboost as xgb
+from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBRegressor
 from sklearn.model_selection import GridSearchCV
 from modelfit import modelfit
+from traintopred import train_to_pred
 
 properties = pd.read_csv(r"C:\Users\dmysit\OneDrive\zillow\input\properties_2016.csv")
 train = pd.read_csv(r"C:\Users\dmysit\OneDrive\zillow\input\train_2016_v2.csv")
@@ -33,7 +35,6 @@ print('Shape train: {}\nShape test: {}'.format(x_train.shape, x_test.shape))
 
 dtrain = xgb.DMatrix(x_train, y_train)
 dtest = xgb.DMatrix(x_test)
-
 
 xgb_regressor = XGBRegressor(
     learning_rate=0.06,
@@ -128,6 +129,9 @@ output = pd.DataFrame({'ParcelId': properties['parcelid'].astype(np.int32),
 cols = output.columns.tolist()
 cols = cols[-1:] + cols[:-1]
 output = output[cols]
-from datetime import datetime
 
 output.to_csv('sub{}.csv'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), index=False)
+
+train_to_pred(train, output)
+
+output.to_csv('sub-updated{}.csv'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), index=False)
