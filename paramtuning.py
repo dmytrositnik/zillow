@@ -118,11 +118,21 @@ modelfit(xgb_regressor, x_train, y_train)
 
 # tune gamma
 
-param_test_gamma = {
- 'gamma': [i/10.0 for i in range(0, 5)]
-}
+# param_test_gamma = {
+#  'gamma': [i/10.0 for i in range(0, 5)]
+# }
+#
+# grid_search(xgb_regressor, param_test_gamma, x_train, y_train)
+# best_params_ {'gamma': 0.0}
 
-grid_search(xgb_regressor, param_test_gamma, x_train, y_train)
+# param_test4 = {
+#  'subsample': [i/10.0 for i in range(6, 10)],
+#  'colsample_bytree': [i/10.0 for i in range(6, 10)]
+# }
+#
+# grid_search(xgb_regressor, param_test4, x_train, y_train)
+
+# best_params_ {"'subsample': 0.9, 'colsample_bytree': 0.9}
 
 xgb_regressor.fit(x_train, y_train)
 pred = xgb_regressor.predict(x_test)
@@ -143,6 +153,6 @@ output = output[cols]
 
 output.to_csv('sub{}.csv'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), index=False)
 
-train_to_pred(train, output)
-
-output.to_csv('sub-updated{}.csv'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), index=False)
+# train_to_pred(train, output)
+#
+# output.to_csv('sub-updated{}.csv'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), index=False)
