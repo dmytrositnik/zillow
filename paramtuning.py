@@ -6,10 +6,21 @@ from sklearn.preprocessing import LabelEncoder
 from xgboost.sklearn import XGBRegressor
 from sklearn.model_selection import GridSearchCV
 from modelfit import modelfit
+from columntobinary import column_to_binary
 from traintopred import train_to_pred
 from gridsearch import grid_search
 
 properties = pd.read_csv(r"C:\Users\dmysit\OneDrive\zillow\input\properties_2016.csv")
+
+properties = column_to_binary(properties,
+                              ['heatingorsystemtypeid',
+                               'propertylandusetypeid',
+                               'storytypeid',
+                               'airconditioningtypeid',
+                               'architecturalstyletypeid',
+                               'typeconstructiontypeid',
+                               'buildingclasstypeid'])
+
 train = pd.read_csv(r"C:\Users\dmysit\OneDrive\zillow\input\train_2016_v2.csv")
 for c in properties.columns:
     properties[c] = properties[c].fillna(-1)
